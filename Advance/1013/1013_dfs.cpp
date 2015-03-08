@@ -1,104 +1,72 @@
 // DFS实现
+// 改变memset和bool，作用都是微乎其微
 
 #include <iostream>
-// #include <stack>
+#include <cstring>
+#include <vector>
 
 using namespace std;
 
 #define MAX 1005
 
-int map[MAX][MAX];
-int visit[MAX];
+vector<int> map[MAX];
+bool visit[MAX];
 
 // 递归的dfs
 // AC
 // time complexity is N^N
+
 /*
 void dfs(int city,int N){
-	visit[city] = 1;
-	for(int i=1;i<=N;i++){
-		if(!visit[i] && map[city][i])
-			dfs(i,N);
+	visit[city] = true;
+	for(size_t i=0;i<map[city].size();i++){
+		if(!visit[map[city][i]])
+			dfs(map[city][i],N);
 	}
 }
 */
 
 // 非递归的dfs
-// time complexity is N*N
-// 使用STL：最后一个case超时
-// 使用自己写的stack：段错误，修改MAX无用
-class MyStack{
-private:
-	int member[MAX];
-	int location;
-
-public:
-	MyStack(){
-		location = 0;
-	}
-
-	void push(int city){
-		member[location++] = city;
-	}
-
-	int top(){
-		return member[location-1];
-	}
-
-	void pop(){
-		location--;
-	}
-
-	bool empty(){
-		return !location;
-	}
-};
-
+// 最后一个数据过不了，运行超时
 void dfs(int city,int N){
-	//stack<int> S;
-	MyStack S;
+	vector<int> stack;
 
-	S.push(city);
-	while(!S.empty()){
-		int curCity = S.top();
-		S.pop();
+	stack.push_back(city);
+	while(!stack.empty()){
+		int curCity = stack.back();
+		stack.pop_back();
 		visit[curCity] = 1;
-		for(int i=1;i<=N;i++)
-			if(!visit[i] && map[curCity][i])
-				S.push(i);
-
+		for(size_t i=0;i<map[curCity].size();i++)
+			if(!visit[map[curCity][i]])
+				stack.push_back(map[curCity][i]);
 	}
 }	
 
 int main(){
 	int N,M,K;
-	cin >> N >> M >> K;
-
-	for(int i=1;i<=N;i++)
-		for(int j=1;j<=N;j++)
-			map[i][j] = 0;
+	scanf("%d %d %d",&N,&M,&K);
 
 	for(int i=0;i<M;i++){
 		int s,e;
-		cin >> s >> e;
-		map[s][e] = map[e][s] = 1;
+		scanf("%d %d",&s,&e);
+		map[s].push_back(e);
+		map[e].push_back(s);
 	}
 
 	while(K--){
 		int check;
 		int count = 0;
-		cin >> check;
+		scanf("%d",&check);
 
-		for(int i=1;i<=N;i++)
-			visit[i] = 0;
-		visit[check] = 1;
+		memset(visit,false,(N+1)*sizeof(bool));
+		visit[check] = true;
 		for(int i=1;i<=N;i++){
 			if(!visit[i]){
 				dfs(i,N);
 				count++;
 			}
 		}
-		cout << count-1 << endl;
+		printf("%d\n",count-1);
 	}
 
 	return 0;
