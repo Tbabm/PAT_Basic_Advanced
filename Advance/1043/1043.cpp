@@ -1,3 +1,9 @@
+// 使用BST和preorder还原树，postorder travel输出结果
+// 判断是否错误：
+// 1.for BST,在第一个大于等于的root的点后面是否还有小于root的点
+// 2.for mirror,在第一个小于root的点后面是否还有大于等于root的点
+// 3.迭代判断
+
 #include <iostream>
 
 using namespace std;
