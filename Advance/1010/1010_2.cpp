@@ -51,7 +51,6 @@ int main(){
 
 	//二分法找radix2
 
-	//需要 long long，因为可能很大！
 	long long low = 0;
 	for(int i=0;i<strlen(num2);i++){
 		int tempInt = char2Int(num2[i]);
